@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "509341084866",
+    "project_id": "efixusers-f7cb7",
+    "storage_bucket": "efixusers-f7cb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509341084866:android:d98c00c294a7c95e1a9f5b",
+        "android_client_info": {
+          "package_name": "com.itsource.efix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509341084866-trhcv3bhvhhgth2pfchvj27eoq4hdgtd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWkEvzPoGl2jetSTsxCFbNzoX_H4GUsCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509341084866-trhcv3bhvhhgth2pfchvj27eoq4hdgtd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
