@@ -22,10 +22,12 @@ import LoadingContext from "../../Context/LoadingContext";
 
 import { BASE_URL } from "../../utils/apiUrls";
 import { AuthContext } from "../../Context/AuthContext";
+import { handleError } from "../../utils/LocalStoreCustomFunc";
+import { getMediaHeader } from "../../utils/Header";
 
 import axios from "axios";
 
-const CreateInvoice = ({ route, navigation }) => {
+const CreateInvoiceScreen = ({ route, navigation }) => {
   const { workID } = route.params;
   const {
     control,
@@ -77,12 +79,10 @@ const CreateInvoice = ({ route, navigation }) => {
     // else {
     //   console.log("The object is empty!");
     // }
-
+    const headers = await getMediaHeader();
     await axios
       .post(`${BASE_URL}/invoice/`, workObjData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       })
       .then((res) => {
         // console.log(res);
@@ -93,12 +93,7 @@ const CreateInvoice = ({ route, navigation }) => {
           setFileResponse({});
         }
       })
-      .catch((err) => {
-        // console.log(err);
-        for (const [key, value] of Object.entries(err.response.data)) {
-          Alert.alert("Error", String(value));
-        }
-      });
+      .catch((error) => handleError(error));
     setLoading(false);
   };
 
@@ -215,4 +210,4 @@ const CreateInvoice = ({ route, navigation }) => {
   );
 };
 
-export default CreateInvoice;
+export default CreateInvoiceScreen;

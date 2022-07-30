@@ -173,8 +173,86 @@ const DetailsServiceScreen = ({ route }) => {
                 </Text>
               )}
             </View>
+
+            <Heading size="sm" color="#808080" mt="2" mb="1">
+              Technician Info:
+            </Heading>
+            <View
+              style={{
+                width: "100%",
+                padding: 10,
+                borderRadius: 5,
+                borderColor: "#d1d1cf",
+                borderWidth: 1,
+              }}
+            >
+              <Text
+                style={{
+                  fontWeight: "600",
+                  fontSize: 16,
+                  color: "#808080",
+                }}
+              >
+                Name: {service.technician.name}
+              </Text>
+              <Text
+                style={{
+                  marginTop: 2,
+                  fontWeight: "500",
+                  fontSize: 14,
+                  color: "#808080",
+                }}
+              >
+                Email: {service.technician.email}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "500",
+                    fontSize: 14,
+                    color: "#808080",
+                  }}
+                >
+                  Phone: {service.technician.phone}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons
+                    name="person"
+                    size={14}
+                    style={{ marginRight: 3 }}
+                    color="#bdbbbb"
+                  />
+                  <Text
+                    style={{
+                      color: "#808080",
+                      marginTop: 5,
+                      fontWeight: "500",
+                    }}
+                  >
+                    Reg No. {service.technician.reg_no}
+                  </Text>
+                </View>
+              </View>
+            </View>
           </Box>
         </Container>
+        <View
+          style={{
+            margin: 23,
+          }}
+        ></View>
       </ScrollView>
     </SafeAreaView>
   );

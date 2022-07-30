@@ -19,15 +19,15 @@ import Loading from "../../utils/Loading";
 
 import axios from "axios";
 
-const CustomerInvoiceListScreen = ({ route, navigation }) => {
+const TechnicianInvoiceListScreen = ({ route, navigation }) => {
   const [invoiceItems, setInvoiceItems] = useState("");
-  const { user } = useContext(AuthContext);
   const [pageLoading, setPageLoading] = useState(true);
+  const { user } = useContext(AuthContext);
 
   const getCreateServiceList = async () => {
     const headers = await getHeader();
     await axios
-      .get(`${BASE_URL}/invoice/?service__customer=${user?.id}`, {
+      .get(`${BASE_URL}/invoice/?service__technician=${user?.id}`, {
         headers,
       })
       .then((res) => {
@@ -41,10 +41,8 @@ const CustomerInvoiceListScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     if (route.params) {
-      if ("totalPaidPosts" in route.params) {
-        setInvoiceItems(route.params.totalPaidPosts);
-      } else if ("totalUnpaidPosts" in route.params) {
-        setInvoiceItems(route.params.totalUnpaidPosts);
+      if ("techIncomeList" in route.params) {
+        setInvoiceItems(route.params.techIncomeList);
       }
       setPageLoading(false);
     } else {
@@ -195,7 +193,7 @@ const CustomerInvoiceListScreen = ({ route, navigation }) => {
                 colorScheme="primary"
                 variant="subtle"
                 onPress={() =>
-                  navigation.navigate("Customer Invoice Details", {
+                  navigation.navigate("Technician Invoice Details", {
                     invoice: item,
                   })
                 }
@@ -233,4 +231,4 @@ const CustomerInvoiceListScreen = ({ route, navigation }) => {
   );
 };
 
-export default CustomerInvoiceListScreen;
+export default TechnicianInvoiceListScreen;

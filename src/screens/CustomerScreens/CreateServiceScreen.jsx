@@ -21,7 +21,7 @@ import {
 import Loading from "../../utils/Loading";
 import LoadingContext from "../../Context/LoadingContext";
 import { handleError } from "../../utils/LocalStoreCustomFunc";
-
+import { getMediaHeader } from "../../utils/Header";
 import { BASE_URL } from "../../utils/apiUrls";
 import { AuthContext } from "../../Context/AuthContext";
 
@@ -73,12 +73,10 @@ const CreateServiceScreen = () => {
     }
 
     // console.log(serviceObjData);
-
+    const headers = await getMediaHeader();
     await axios
       .post(`${BASE_URL}/service_request/`, serviceObjData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       })
       .then((res) => {
         // console.log(res);

@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useForm } from "react-hook-form";
+import { Link } from "native-base";
 
 import axios from "axios";
 
@@ -31,6 +32,7 @@ const LoginScreen = ({ navigation }) => {
   const { loading, setLoading } = useContext(LoadingContext);
   const { user, setUser, authToken, setAuthToken } = useContext(AuthContext);
 
+  const [passShow, setPassShow] = useState(false);
   const [initLoading, setInitLoading] = useState(true);
 
   const {
@@ -184,12 +186,26 @@ const LoginScreen = ({ navigation }) => {
               message: "Password should be at least 6 characters long",
             },
           }}
+          passShow={passShow}
+          setPassShow={setPassShow}
           errors={errors}
         />
 
+        <Link href="https://efixbd.com/password_reset/">
+          <Text
+            style={{
+              color: "#AD40AF",
+              fontWeight: "700",
+              marginTop: 8,
+              marginRight: 5,
+            }}
+          >
+            Forgot Password?
+          </Text>
+        </Link>
+
         <TouchableOpacity
           onPress={handleSubmit(handleLogin)}
-          // onPress={() => navigation.replace("Technician Main")}
           style={{
             backgroundColor: "#AD40AF",
             padding: 20,

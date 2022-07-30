@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { ImageBackground } from "react-native";
 import {
   Button,
   Container,
@@ -10,6 +11,8 @@ import {
   VStack,
   Text,
   Avatar,
+  Link,
+  Image,
 } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../Context/AuthContext";
@@ -83,40 +86,22 @@ export const ProfileScreen = ({ navigation }) => {
                     mr="5"
                   />
                 }
-                onPress={() => {}}
+                onPress={() => navigation.navigate("Update Info")}
               >
                 Update Information
               </Button>
-              <Button
+              <Link
                 bg="lightBlue.50"
                 _text={{
                   color: "#1F2937",
                 }}
-                _icon={{ color: "#333" }}
-                _pressed={{ bg: "blueGray.200" }}
+                px="2.5"
                 justifyContent="flex-start"
-                leftIcon={
-                  <Icon as={Ionicons} name="key-outline" size="sm" mr="5" />
-                }
-                onPress={() => {}}
+                href="https://efixbd.com/"
               >
-                Change Password
-              </Button>
-              <Button
-                bg="lightBlue.50"
-                _text={{
-                  color: "#1F2937",
-                }}
-                _icon={{ color: "#333" }}
-                _pressed={{ bg: "blueGray.200" }}
-                justifyContent="flex-start"
-                leftIcon={
-                  <Icon as={Ionicons} name="cog-outline" size="sm" mr="5" />
-                }
-                onPress={() => {}}
-              >
-                Settings
-              </Button>
+                <Icon as={Ionicons} name="key-outline" size="sm" mr="7" />
+                <Text>Change Password</Text>
+              </Link>
               <Button
                 bg="lightBlue.50"
                 _text={{
@@ -126,6 +111,7 @@ export const ProfileScreen = ({ navigation }) => {
                 _pressed={{ bg: "blueGray.200" }}
                 justifyContent="flex-start"
                 leftIcon={<Icon as={Ionicons} name="open" size="sm" mr="5" />}
+                onPress={() => navigation.navigate("About")}
               >
                 About
               </Button>
@@ -145,6 +131,15 @@ export const ProfileScreen = ({ navigation }) => {
                 Logout
               </Button>
             </VStack>
+            <Image
+              mt="10"
+              size="xl"
+              resizeMode="contain"
+              rounded={5}
+              w="100%"
+              source={require("../../assets/images/technician.jpg")}
+              alt="profile_bg"
+            />
           </Box>
         </Box>
       </Container>

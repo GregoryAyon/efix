@@ -14,6 +14,7 @@ import {
   CustomInput,
   CustomSelect,
   CustomSelectArea,
+  CustomSignupTextArea,
 } from "../components/SignupCustomFeilds";
 
 import Loading from "../utils/Loading";
@@ -38,9 +39,9 @@ const SignupScreen = ({ navigation }) => {
   const pwd = watch("password");
 
   const { loading, setLoading } = useContext(LoadingContext);
-  const [division, setDivision] = useState([]);
-  const [district, setDistrict] = useState([]);
-  const [upazila, setUpazila] = useState([]);
+  // const [division, setDivision] = useState([]);
+  // const [district, setDistrict] = useState([]);
+  // const [upazila, setUpazila] = useState([]);
 
   // Handle Signup
   const handleSignup = async (data) => {
@@ -64,55 +65,55 @@ const SignupScreen = ({ navigation }) => {
   };
 
   // Handle Division Api
-  const getDivisions = async () => {
-    await axios
-      .get(`${BASE_URL}/division/`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        // console.log(res.data);
-        setDivision(res.data);
-      })
-      .catch((error) => handleError(error));
-  };
+  // const getDivisions = async () => {
+  //   await axios
+  //     .get(`${BASE_URL}/division/`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setDivision(res.data);
+  //     })
+  //     .catch((error) => handleError(error));
+  // };
 
-  // Handle District Api
-  const getDistrict = async (divisionName) => {
-    // console.log("Get Data: ", divisionID);
-    await axios
-      .get(`${BASE_URL}/district/?search=${divisionName}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        // console.log(res.data);
-        setDistrict(res.data);
-      })
-      .catch((error) => handleError(error));
-  };
+  // // Handle District Api
+  // const getDistrict = async (divisionName) => {
+  //   // console.log("Get Data: ", divisionID);
+  //   await axios
+  //     .get(`${BASE_URL}/district/?search=${divisionName}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setDistrict(res.data);
+  //     })
+  //     .catch((error) => handleError(error));
+  // };
 
-  // Handle Upazila Api
-  const getUpazila = async (districtName) => {
-    // console.log("Get Data: ", districtID);
-    await axios
-      .get(`${BASE_URL}/upazila/?search=${districtName}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        // console.log(res.data);
-        setUpazila(res.data);
-      })
-      .catch((error) => handleError(error));
-  };
+  // // Handle Upazila Api
+  // const getUpazila = async (districtName) => {
+  //   // console.log("Get Data: ", districtID);
+  //   await axios
+  //     .get(`${BASE_URL}/upazila/?search=${districtName}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setUpazila(res.data);
+  //     })
+  //     .catch((error) => handleError(error));
+  // };
 
-  useEffect(() => {
-    getDivisions();
-  }, []);
+  // useEffect(() => {
+  //   getDivisions();
+  // }, []);
 
   if (loading) {
     return <Loading />;
@@ -155,20 +156,6 @@ const SignupScreen = ({ navigation }) => {
         />
 
         <CustomInput
-          type="email"
-          name="email"
-          label="Email Address"
-          placeholder="Email Address"
-          control={control}
-          rules={{
-            required: "Field is required",
-            minLength: 3,
-            pattern: { value: EMAIL_REGEX, message: "Invalid Email" },
-          }}
-          errors={errors}
-        />
-
-        <CustomInput
           type="text"
           name="phone"
           label="Phone Number"
@@ -185,6 +172,21 @@ const SignupScreen = ({ navigation }) => {
           errors={errors}
         />
 
+        <CustomInput
+          type="email"
+          name="email"
+          label="Email Address"
+          placeholder="Email Address"
+          control={control}
+          rules={{
+            // required: "Field is required",
+            minLength: 3,
+            pattern: { value: EMAIL_REGEX, message: "Invalid Email" },
+          }}
+          isRequired={false}
+          errors={errors}
+        />
+
         <CustomSelect
           name="role"
           label="Select Role"
@@ -195,7 +197,7 @@ const SignupScreen = ({ navigation }) => {
           errors={errors}
         />
 
-        <CustomSelect
+        {/* <CustomSelect
           name="registration_type"
           label="Registration Type"
           placeholder="Select Type"
@@ -203,9 +205,9 @@ const SignupScreen = ({ navigation }) => {
           items={["Residential", "Commercial", "Other"]}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
-        />
+        /> */}
 
-        <CustomSelect
+        {/* <CustomSelect
           name="country"
           label="Country"
           placeholder="Select Country"
@@ -213,9 +215,9 @@ const SignupScreen = ({ navigation }) => {
           items={["Bangladesh"]}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
-        />
+        /> */}
 
-        <CustomSelectArea
+        {/* <CustomSelectArea
           name="division"
           label="Division"
           placeholder="Select Division"
@@ -225,9 +227,9 @@ const SignupScreen = ({ navigation }) => {
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
           getData={getDistrict}
-        />
+        /> */}
 
-        <CustomSelectArea
+        {/* <CustomSelectArea
           name="district"
           label="District"
           placeholder="Select District"
@@ -236,9 +238,9 @@ const SignupScreen = ({ navigation }) => {
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
           getData={getUpazila}
-        />
+        /> */}
 
-        <CustomSelectArea
+        {/* <CustomSelectArea
           name="upazila"
           label="Upazila"
           placeholder="Select Upazila"
@@ -246,9 +248,9 @@ const SignupScreen = ({ navigation }) => {
           items={upazila}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
-        />
+        /> */}
 
-        <CustomInput
+        {/* <CustomInput
           type="text"
           name="post_office_or_union"
           label="Post Office / Union"
@@ -256,9 +258,9 @@ const SignupScreen = ({ navigation }) => {
           control={control}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
-        />
+        /> */}
 
-        <CustomInput
+        {/* <CustomInput
           type="text"
           name="house_info"
           label="House Info / Village"
@@ -266,14 +268,24 @@ const SignupScreen = ({ navigation }) => {
           control={control}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}
-        />
+        /> */}
 
-        <CustomInput
+        {/* <CustomInput
           type="text"
           name="nid"
           label="N-ID"
           placeholder="Enter NID"
           keyboardType="numeric"
+          control={control}
+          rules={{ required: "Field is required", minLength: 4 }}
+          errors={errors}
+        /> */}
+
+        <CustomSignupTextArea
+          type="text"
+          name="house_info"
+          label="Address"
+          placeholder="Enter Address"
           control={control}
           rules={{ required: "Field is required", minLength: 4 }}
           errors={errors}

@@ -27,7 +27,7 @@ export default function App() {
     setStatusBarBackgroundColor("transparent");
     setStatusBarStyle("dark");
 
-    registerForPushNotificationsAsync();
+    // registerForPushNotificationsAsync();
   }, []);
 
   return (

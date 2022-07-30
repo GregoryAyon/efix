@@ -55,6 +55,8 @@ export const CustomLoginInput = ({
 
 export const CustomLoginPasswordInput = ({
   isdisabled = false,
+  setPassShow,
+  passShow,
   type,
   name,
   label,
@@ -76,7 +78,7 @@ export const CustomLoginPasswordInput = ({
               placeholder={placeholder}
               onChangeText={(val) => onChange(val)}
               value={value}
-              type={type}
+              type={passShow ? "text" : type}
               isDisabled={isdisabled}
               keyboardType={keyboardType}
               InputLeftElement={
@@ -89,16 +91,18 @@ export const CustomLoginPasswordInput = ({
                 />
               }
               InputRightElement={
-                <TouchableOpacity onPress={() => {}}>
-                  <Text
-                    style={{
-                      color: "#AD40AF",
-                      fontWeight: "700",
-                      marginRight: 5,
-                    }}
-                  >
-                    Forgot?
-                  </Text>
+                <TouchableOpacity onPress={() => setPassShow(!passShow)}>
+                  <Icon
+                    m="2"
+                    size="md"
+                    mr="5"
+                    color="gray.400"
+                    as={
+                      <Ionicons
+                        name={passShow ? "eye-outline" : "eye-off-outline"}
+                      />
+                    }
+                  />
                 </TouchableOpacity>
               }
             />

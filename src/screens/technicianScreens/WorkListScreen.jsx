@@ -20,23 +20,25 @@ import {
 import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../utils/apiUrls";
 import { handleError } from "../../utils/LocalStoreCustomFunc";
+import { getHeader } from "../../utils/Header";
+import Loading from "../../utils/Loading";
 
 import axios from "axios";
 
-const WorkListScreen = ({ navigation }) => {
+const WorkListScreen = ({ route, navigation }) => {
   const [serviceItems, setServiceItems] = useState("");
   const [search, setSearch] = useState("");
+  const [pageLoading, setPageLoading] = useState(true);
 
   const { user } = useContext(AuthContext);
 
   const getCreateServiceList = async () => {
+    const headers = await getHeader();
     await axios
       .get(
         `${BASE_URL}/service_request/?technician=${user?.id}&search=${search}`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers,
         }
       )
       .then((res) => {
@@ -44,6 +46,7 @@ const WorkListScreen = ({ navigation }) => {
         setServiceItems(res.data);
       })
       .catch((error) => handleError(error));
+    setPageLoading(false);
   };
 
   //   console.log(serviceItems);
@@ -67,8 +70,19 @@ const WorkListScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getCreateServiceList();
+    if (route.params) {
+      if ("completedServices" in route.params) {
+        setServiceItems(route.params.completedServices);
+      } else if ("pendingServices" in route.params) {
+        setServiceItems(route.params.pendingServices);
+      }
+      setPageLoading(false);
+    } else {
+      getCreateServiceList();
+    }
   }, [search]);
+
+  if (pageLoading) return <Loading />;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#bab9b6" }}>

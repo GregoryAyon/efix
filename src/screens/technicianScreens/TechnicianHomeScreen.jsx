@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import { Image } from "native-base";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -14,9 +15,29 @@ import Loading from "../../utils/Loading";
 import { AuthContext } from "../../Context/AuthContext";
 
 import InactiveComponent from "../../components/inactiveComponent";
+import {
+  getAssignedService,
+  getcompletedService,
+  getPendingService,
+  getTechIncome,
+  getTechIncomeAmount,
+} from "../../utils/QuickSummery";
 
 const TechnicianHomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
+  const [assignedServiceData, setAssignedServiceData] = useState({});
+  const [completedServiceData, setCompletedServiceData] = useState({});
+  const [pendingServiceData, setPendingServiceData] = useState({});
+  const [techIncome, setTechIncome] = useState(null);
+
+  // console.log(completedServiceData.length);
+
+  useEffect(() => {
+    getAssignedService(user, setAssignedServiceData);
+    getcompletedService(user, setCompletedServiceData);
+    getPendingService(user, setPendingServiceData);
+    getTechIncome(user, setTechIncome);
+  }, []);
 
   return (
     <>
@@ -54,7 +75,7 @@ const TechnicianHomeScreen = ({ navigation }) => {
               >
                 Hello, {user?.name} !
               </Text>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <ImageBackground
                   source={require("../../../assets/images/user-profile.jpg")}
                   style={{
@@ -94,13 +115,13 @@ const TechnicianHomeScreen = ({ navigation }) => {
                   padding: 12,
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Work List")}
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -129,7 +150,7 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       borderBottomColor: "#fff",
                     }}
                   >
-                    Assigned Setvices
+                    Assigned Services
                   </Text>
                   <Text
                     style={{
@@ -139,17 +160,21 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    13
+                    {assignedServiceData ? assignedServiceData.length : 0}
                   </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Work List", {
+                      completedServices: completedServiceData,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -178,7 +203,7 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       borderBottomColor: "#fff",
                     }}
                   >
-                    Completed Setvices
+                    Completed Services
                   </Text>
                   <Text
                     style={{
@@ -188,9 +213,9 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    06
+                    {completedServiceData ? completedServiceData.length : 0}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
               {/* card row 1 end */}
 
@@ -203,13 +228,17 @@ const TechnicianHomeScreen = ({ navigation }) => {
                   padding: 12,
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Work List", {
+                      pendingServices: pendingServiceData,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -238,7 +267,7 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       borderBottomColor: "#fff",
                     }}
                   >
-                    Remaining Setvices
+                    Pending Services
                   </Text>
                   <Text
                     style={{
@@ -248,17 +277,21 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    07
+                    {pendingServiceData ? pendingServiceData.length : 0}
                   </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Technician Invoice List", {
+                      techIncomeList: techIncome,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -297,9 +330,9 @@ const TechnicianHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    2600 Tk.
+                    <Text>&#x9F3;</Text> {getTechIncomeAmount(techIncome)}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
               {/* card row 2 end */}
             </View>
@@ -352,7 +385,9 @@ const TechnicianHomeScreen = ({ navigation }) => {
                   }}
                 ></View>
 
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Technician Invoice List")}
+                >
                   <View
                     style={{
                       alignItems: "center",
@@ -368,6 +403,16 @@ const TechnicianHomeScreen = ({ navigation }) => {
                   </View>
                 </TouchableOpacity>
               </View>
+              <Image
+                mt="6"
+                mb="4"
+                size="xl"
+                resizeMode="contain"
+                rounded={5}
+                w="100%"
+                source={require("../../../assets/images/customer-home.jpg")}
+                alt="profile_bg"
+              />
             </View>
           </ScrollView>
         </SafeAreaView>

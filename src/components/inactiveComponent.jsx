@@ -73,13 +73,12 @@ const inactiveComponent = () => {
               fontSize: 16,
               fontWeight: "500",
               textAlign: "center",
-              padding: 10,
+              padding: 12,
             }}
           >
             We recieved your registretion. But you can't access your deshborad
-            yet. Please get your membership first. Now please logout your
-            account and wait for acount activation mail then login again. Thank
-            you.
+            yet. Please get your membership first. Now please close your app and
+            wait for acount activation notification then login again. Thank you.
           </Text>
         </View>
       </View>

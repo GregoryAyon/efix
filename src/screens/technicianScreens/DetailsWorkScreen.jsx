@@ -22,6 +22,8 @@ import {
 } from "../../components/CustomerComponents/CustomFieldsCustomer";
 
 import { BASE_URL } from "../../utils/apiUrls";
+import { getMediaHeader, getHeader } from "../../utils/Header";
+import { handleError } from "../../utils/LocalStoreCustomFunc";
 import axios from "axios";
 
 const DetailsWorkScreen = ({ route, navigation }) => {
@@ -50,12 +52,11 @@ const DetailsWorkScreen = ({ route, navigation }) => {
     serviceObjData.append("status", data.status);
 
     // console.log(serviceObjData);
-
+    const headers = await getMediaHeader();
+    // console.log({ headers });
     await axios
       .patch(`${BASE_URL}/service_request/${service.id}/`, serviceObjData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers,
       })
       .then((res) => {
         // console.log(res);
@@ -64,10 +65,9 @@ const DetailsWorkScreen = ({ route, navigation }) => {
           navigation.replace("Work List");
         }
       })
-      .catch((err) => {
-        for (const [key, value] of Object.entries(err.response.data)) {
-          Alert.alert("Error", String(value));
-        }
+      .catch((error) => {
+        // console.log(error);
+        return handleError(error);
       });
     setLoading(false);
   };
@@ -227,7 +227,6 @@ const DetailsWorkScreen = ({ route, navigation }) => {
             </Heading>
             <View
               style={{
-                height: 70,
                 width: "100%",
                 padding: 10,
                 borderRadius: 5,
@@ -279,7 +278,7 @@ const DetailsWorkScreen = ({ route, navigation }) => {
                 >
                   <Ionicons
                     name="person"
-                    size={15}
+                    size={14}
                     style={{ marginRight: 3 }}
                     color="#bdbbbb"
                   />
@@ -287,13 +286,23 @@ const DetailsWorkScreen = ({ route, navigation }) => {
                     style={{
                       color: "#808080",
                       marginTop: 5,
-                      fontWeight: "700",
+                      fontWeight: "500",
                     }}
                   >
                     Reg No. {service.customer.reg_no}
                   </Text>
                 </View>
               </View>
+
+              <Text
+                style={{
+                  color: "#808080",
+                  marginTop: 5,
+                  fontWeight: "700",
+                }}
+              >
+                Address: {service.customer.house_info}
+              </Text>
             </View>
           </Box>
         </Container>

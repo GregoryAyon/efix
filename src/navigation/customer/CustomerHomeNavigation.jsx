@@ -6,6 +6,9 @@ import CreateServiceScreen from "../../screens/CustomerScreens/CreateServiceScre
 import ServiceListScreen from "../../screens/CustomerScreens/ServiceListScreen";
 import DetailsServiceScreen from "../../screens/CustomerScreens/DetailsServiceScreen";
 import CustomerInvoiceListScreen from "../../screens/CustomerScreens/CustomerInvoiceListScreen";
+import CustomerInvoiceDetailsScreen from "../../screens/CustomerScreens/CustomerInvoiceDetailsScreen";
+import UpdateInfoScreen from "../../screens/UpdateInfoScreen";
+import AboutScreen from "../../screens/AboutScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +53,34 @@ const CustomerHomeNavigation = () => {
       <Stack.Screen
         name="Customer Invoice List"
         component={CustomerInvoiceListScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: "white",
+        }}
+      />
+
+      <Stack.Screen
+        name="Customer Invoice Details"
+        component={CustomerInvoiceDetailsScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: "white",
+        }}
+      />
+
+      {/* Profile Update Navigation */}
+      <Stack.Screen
+        name="Update Info"
+        component={UpdateInfoScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: "white",
+        }}
+      />
+
+      <Stack.Screen
+        name="About"
+        component={AboutScreen}
         options={{
           headerTransparent: true,
           headerTintColor: "white",

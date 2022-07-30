@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import { Image } from "native-base";
 
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,9 +16,35 @@ import Loading from "../../utils/Loading";
 import { AuthContext } from "../../Context/AuthContext";
 
 import InactiveComponent from "../../components/inactiveComponent";
+import {
+  getCancelledPost,
+  getcompletedPost,
+  getincompletedPost,
+  getTotalCost,
+  getTotalCostAmount,
+  getTotalPaidCost,
+  getTotalPaidCostAmount,
+  getTotalUnpaidCost,
+  getTotalUnpaidCostAmount,
+} from "../../utils/QuickSummery";
 
 const CustomerHomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
+  const [completedPostData, setCompletedPostData] = useState({});
+  const [incompletedPostData, setIncompletedPostData] = useState({});
+  const [cancelledPostData, setCancelledPostData] = useState({});
+  const [totalCost, setTotalCost] = useState(null);
+  const [totalPaidCost, setTotalPaidCost] = useState(null);
+  const [totalUnpaidCost, setTotalUnpaidCost] = useState(null);
+
+  useEffect(() => {
+    getCancelledPost(user, setCancelledPostData);
+    getcompletedPost(user, setCompletedPostData);
+    getincompletedPost(user, setIncompletedPostData);
+    getTotalCost(user, setTotalCost);
+    getTotalPaidCost(user, setTotalPaidCost);
+    getTotalUnpaidCost(user, setTotalUnpaidCost);
+  }, []);
 
   return (
     <>
@@ -55,7 +82,7 @@ const CustomerHomeScreen = ({ navigation }) => {
               >
                 Hello, {user?.name} !
               </Text>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <ImageBackground
                   source={require("../../../assets/images/user-profile.jpg")}
                   style={{
@@ -95,62 +122,17 @@ const CustomerHomeScreen = ({ navigation }) => {
                   padding: 12,
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Service List", {
+                      completedPosts: completedPostData,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Created Post
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    13
-                  </Text>
-                </View>
-
-                <View
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 5,
-                    borderRadius: 5,
-                    width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -189,27 +171,21 @@ const CustomerHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    06
+                    {completedPostData ? completedPostData.length : 0}
                   </Text>
-                </View>
-              </View>
+                </TouchableOpacity>
 
-              {/* card row 2 */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Service List", {
+                      incompletedPosts: incompletedPostData,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -248,17 +224,80 @@ const CustomerHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    07
+                    {incompletedPostData ? incompletedPostData.length : 0}
                   </Text>
-                </View>
+                </TouchableOpacity>
+              </View>
 
-                <View
+              {/* card row 2 */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: 12,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Service List", {
+                      cancelledPosts: cancelledPostData,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
+                    alignItems: "center",
+                    margin: 1,
+
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                  }}
+                >
+                  <Ionicons
+                    name="copy"
+                    size={32}
+                    style={{ marginTop: 4 }}
+                    color="#fff"
+                  />
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 16,
+                      fontWeight: "700",
+                      borderBottomWidth: 2,
+                      borderBottomColor: "#fff",
+                    }}
+                  >
+                    Cancelled Post
+                  </Text>
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontSize: 22,
+                      fontWeight: "700",
+                      marginTop: 5,
+                    }}
+                  >
+                    {cancelledPostData ? cancelledPostData.length : 0}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Customer Invoice List")}
+                  style={{
+                    backgroundColor: "#286fad",
+                    padding: 10,
+                    borderRadius: 5,
+                    width: 150,
                     alignItems: "center",
                     margin: 1,
 
@@ -297,9 +336,9 @@ const CustomerHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    <Text>&#x9F3;</Text> 1500
+                    <Text>&#x9F3;</Text> {getTotalCostAmount(totalCost)}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
 
               {/* card row 3 */}
@@ -311,13 +350,17 @@ const CustomerHomeScreen = ({ navigation }) => {
                   padding: 12,
                 }}
               >
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Customer Invoice List", {
+                      totalPaidPosts: totalPaidCost,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -356,17 +399,21 @@ const CustomerHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    <Text>&#x9F3;</Text> 566
+                    <Text>&#x9F3;</Text> {getTotalPaidCostAmount(totalPaidCost)}
                   </Text>
-                </View>
+                </TouchableOpacity>
 
-                <View
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("Customer Invoice List", {
+                      totalUnpaidPosts: totalUnpaidCost,
+                    })
+                  }
                   style={{
                     backgroundColor: "#286fad",
-                    padding: 5,
+                    padding: 10,
                     borderRadius: 5,
                     width: 150,
-                    height: 100,
                     alignItems: "center",
                     margin: 1,
 
@@ -395,7 +442,7 @@ const CustomerHomeScreen = ({ navigation }) => {
                       borderBottomColor: "#fff",
                     }}
                   >
-                    Total Due
+                    Total Unpaid
                   </Text>
                   <Text
                     style={{
@@ -405,9 +452,10 @@ const CustomerHomeScreen = ({ navigation }) => {
                       marginTop: 5,
                     }}
                   >
-                    <Text>&#x9F3;</Text> 944
+                    <Text>&#x9F3;</Text>{" "}
+                    {getTotalUnpaidCostAmount(totalUnpaidCost)}
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -417,7 +465,7 @@ const CustomerHomeScreen = ({ navigation }) => {
                 backgroundColor: "#fff",
                 padding: 10,
                 marginTop: 5,
-                marginBottom: 10,
+                marginBottom: 5,
 
                 shadowColor: "#4a4848",
                 shadowOffset: { width: 0, height: 1 },
@@ -487,6 +535,15 @@ const CustomerHomeScreen = ({ navigation }) => {
                   </View>
                 </TouchableOpacity>
               </View>
+              <Image
+                // mt="1"
+                size="xl"
+                resizeMode="contain"
+                rounded={5}
+                w="100%"
+                source={require("../../../assets/images/customer-home.jpg")}
+                alt="profile_bg"
+              />
             </View>
           </ScrollView>
         </SafeAreaView>

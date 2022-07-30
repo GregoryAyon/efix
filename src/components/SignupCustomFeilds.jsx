@@ -1,9 +1,17 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Input, FormControl, Icon, Select, CheckIcon } from "native-base";
+import {
+  Input,
+  FormControl,
+  Icon,
+  Select,
+  CheckIcon,
+  TextArea,
+} from "native-base";
 
 export const CustomInput = ({
   isdisabled = false,
+  isRequired = true,
   type,
   name,
   label,
@@ -14,7 +22,7 @@ export const CustomInput = ({
   keyboardType = "default",
 }) => {
   return (
-    <FormControl isRequired isInvalid={name in errors} mb="1">
+    <FormControl isRequired={isRequired} isInvalid={name in errors} mb="1">
       <FormControl.Label>{label}</FormControl.Label>
       <Controller
         control={control}
@@ -132,6 +140,46 @@ export const CustomSelectArea = ({
                 );
               })}
             </Select>
+            <FormControl.ErrorMessage>
+              {errors[name]?.message}
+            </FormControl.ErrorMessage>
+          </>
+        )}
+        name={name}
+        rules={rules}
+        defaultValue=""
+      />
+    </FormControl>
+  );
+};
+
+export const CustomSignupTextArea = ({
+  isReadOnly = false,
+  type,
+  name,
+  label,
+  control,
+  placeholder,
+  rules = {},
+  errors,
+}) => {
+  return (
+    <FormControl isRequired isInvalid={name in errors} mb="1">
+      <FormControl.Label>{label}</FormControl.Label>
+      <Controller
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <>
+            <TextArea
+              h={20}
+              type={type}
+              onBlur={onBlur}
+              placeholder={placeholder}
+              onChangeText={(val) => onChange(val)}
+              value={value}
+              isReadOnly={isReadOnly}
+              w="100%"
+            />
             <FormControl.ErrorMessage>
               {errors[name]?.message}
             </FormControl.ErrorMessage>

@@ -14,34 +14,35 @@ import { Box, Heading, Center } from "native-base";
 
 import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../utils/apiUrls";
+import { handleError } from "../../utils/LocalStoreCustomFunc";
+import { getHeader } from "../../utils/Header";
+import Loading from "../../utils/Loading";
 
 import axios from "axios";
 
-const ServiceListScreen = ({ navigation }) => {
+const ServiceListScreen = ({ route, navigation }) => {
   const [serviceItems, setServiceItems] = useState("");
   const [search, setSearch] = useState("");
-
   const { user } = useContext(AuthContext);
+  const [pageLoading, setPageLoading] = useState(true);
+
+  // console.log(route.params);
 
   const getCreateServiceList = async () => {
+    const headers = await getHeader();
     await axios
       .get(
         `${BASE_URL}/service_request/?customer=${user?.id}&search=${search}`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers,
         }
       )
       .then((res) => {
         // console.log(res.data);
         setServiceItems(res.data);
       })
-      .catch((err) => {
-        for (const [key, value] of Object.entries(err.response.data)) {
-          Alert.alert("Error", String(value));
-        }
-      });
+      .catch((error) => handleError(error));
+    setPageLoading(false);
   };
 
   const getStatusPerfactValue = (item) => {
@@ -64,8 +65,21 @@ const ServiceListScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getCreateServiceList();
+    if (route.params) {
+      if ("completedPosts" in route.params) {
+        setServiceItems(route.params.completedPosts);
+      } else if ("incompletedPosts" in route.params) {
+        setServiceItems(route.params.incompletedPosts);
+      } else if ("cancelledPosts" in route.params) {
+        setServiceItems(route.params.cancelledPosts);
+      }
+      setPageLoading(false);
+    } else {
+      getCreateServiceList();
+    }
   }, [search]);
+
+  if (pageLoading) return <Loading />;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#bab9b6" }}>
@@ -109,9 +123,21 @@ const ServiceListScreen = ({ navigation }) => {
           marginTop: 10,
         }}
         ListHeaderComponent={
-          <Heading size="md" color="#333" mt="5" ml="5">
-            Service List View
-          </Heading>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 5,
+            }}
+          >
+            <Heading size="md" color="#333" mt="5" ml="5">
+              Service List View
+            </Heading>
+            <Heading size="md" color="#333" mt="5" mr="5">
+              All ({serviceItems.length})
+            </Heading>
+          </View>
         }
         ListEmptyComponent={
           <Center
@@ -139,7 +165,7 @@ const ServiceListScreen = ({ navigation }) => {
             p="3"
             rounded="lg"
             shadow={2}
-            mb="2"
+            mb="1"
           >
             <Text
               style={{
