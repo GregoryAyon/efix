@@ -109,28 +109,10 @@ const TechnicianInvoiceDetailsScreen = ({ route, navigation }) => {
                 marginTop: 10,
                 marginBottom: 10,
                 flexDirection: "row",
-                justifyContent: "space-between",
+                justifyContent: "flex-end",
                 alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                }}
-              >
-                <Ionicons
-                  name="list"
-                  size={15}
-                  style={{ marginRight: 3, marginTop: 5 }}
-                  color="#bdbbbb"
-                />
-                <Text style={{ opacity: 0.5, marginTop: 5 }}>
-                  Payment Status: {invoice.status}
-                </Text>
-              </View>
-
               <View
                 style={{
                   flexDirection: "row",

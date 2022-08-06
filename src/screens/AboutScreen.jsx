@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, ImageBackground, Text } from "react-native";
-import { Container, Box, ScrollView, Button, Heading } from "native-base";
+import { Container, Box, ScrollView, Button, Heading, Link } from "native-base";
 
 const AboutScreen = () => {
   return (
@@ -48,6 +48,7 @@ const AboutScreen = () => {
               </Text>
               <Text style={{ fontSize: 14 }}>Phone: (+88) 01873-666673</Text>
               <Text style={{ fontSize: 14 }}>Mail: sales@itsourcebd.com</Text>
+              <Text style={{ fontSize: 14 }}>Website: www.itsourcebd.com</Text>
             </View>
           </Box>
         </Container>

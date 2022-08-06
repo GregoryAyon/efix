@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { View, SafeAreaView, FlatList, ImageBackground } from "react-native";
 import { Searchbar } from "react-native-paper";
 
@@ -16,6 +16,7 @@ import {
   Button,
   Icon,
 } from "native-base";
+import { useFocusEffect } from '@react-navigation/native';
 
 import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../utils/apiUrls";
@@ -50,37 +51,21 @@ const WorkListScreen = ({ route, navigation }) => {
   };
 
   //   console.log(serviceItems);
-  const getStatusPerfactValue = (item) => {
-    // console.log(typeof item.status);
-    if (item.status === "new") {
-      return "New";
-    } else if (item.status === "in_progress") {
-      return "In Progress";
-    } else if (item.status === "waittingoncustomer") {
-      return "Waitting on Customer";
-    } else if (item.status === "fixed") {
-      return "Fixed";
-    } else if (item.status === "closed") {
-      return "Closed";
-    } else if (item.status === "cancelled") {
-      return "Cancelled";
-    } else {
-      return "None";
-    }
-  };
 
-  useEffect(() => {
-    if (route.params) {
-      if ("completedServices" in route.params) {
-        setServiceItems(route.params.completedServices);
-      } else if ("pendingServices" in route.params) {
-        setServiceItems(route.params.pendingServices);
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params) {
+        if ("completedServices" in route.params) {
+          setServiceItems(route.params.completedServices);
+        } else if ("pendingServices" in route.params) {
+          setServiceItems(route.params.pendingServices);
+        }
+        setPageLoading(false);
+      } else {
+        getCreateServiceList();
       }
-      setPageLoading(false);
-    } else {
-      getCreateServiceList();
-    }
-  }, [search]);
+    }, [search])
+  );
 
   if (pageLoading) return <Loading />;
 
@@ -101,21 +86,25 @@ const WorkListScreen = ({ route, navigation }) => {
         }}
       ></View>
 
-      <View
-        style={{
-          backgroundColor: "#dbd9d9",
-          marginTop: 10,
-          padding: 18,
-          borderTopLeftRadius: 15,
-          borderTopRightRadius: 15,
-        }}
-      >
-        <Searchbar
-          placeholder="Search Service"
-          onChangeText={(value) => setSearch(value)}
-          value={search}
-        />
-      </View>
+      {route.params ? (
+        <></>
+      ) : (
+        <View
+          style={{
+            backgroundColor: "#dbd9d9",
+            marginTop: 10,
+            padding: 18,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
+        >
+          <Searchbar
+            placeholder="Search Service"
+            onChangeText={(value) => setSearch(value)}
+            value={search}
+          />
+        </View>
+      )}
 
       <FlatList
         h="100%"
@@ -195,11 +184,11 @@ const WorkListScreen = ({ route, navigation }) => {
                 fontSize="sm"
                 style={{ textTransform: "capitalize" }}
               >
-                {getStatusPerfactValue(item)}
+                {item.status}
               </Text>
 
               {item ? (
-                item.status === "closed" ? (
+                item.status === "Completed" ? (
                   <Button
                     size="xs"
                     ml="4"
@@ -220,7 +209,7 @@ const WorkListScreen = ({ route, navigation }) => {
                 <></>
               )}
             </HStack>
-            <Flex direction="row" justify="space-between" align="center" mt="1">
+            <Flex direction="row" justify="flex-end" align="center" mt="1">
               <Pressable
                 onPress={() =>
                   navigation.navigate("Details Work", { service: item })
@@ -254,26 +243,6 @@ const WorkListScreen = ({ route, navigation }) => {
                   );
                 }}
               </Pressable>
-
-              <Badge
-                size="sm"
-                py="1"
-                px="2"
-                variant="subtle"
-                colorScheme={
-                  item.priority == "High"
-                    ? "error"
-                    : item.priority == "Medium"
-                    ? "amber"
-                    : "lime"
-                }
-                _text={{ textTransform: "capitalize" }}
-                leftIcon={
-                  <Icon as={Ionicons} name="filter-outline" size="xs" />
-                }
-              >
-                {item.priority}
-              </Badge>
             </Flex>
           </Box>
         )}

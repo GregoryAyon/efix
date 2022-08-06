@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Container, Box, ScrollView, Heading, Link, Button } from "native-base";
 import { useForm } from "react-hook-form";
+import * as Linking from "expo-linking";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -125,15 +126,6 @@ const DetailsWorkScreen = ({ route, navigation }) => {
               errors={errors}
             />
 
-            <CreateServiceSelectPriority
-              isDisabled={true}
-              name="priority"
-              label="Select Priority"
-              control={control}
-              rules={{ required: "Field is required", minLength: 3 }}
-              errors={errors}
-            />
-
             <CreateServiceTextArea
               isReadOnly={true}
               type="text"
@@ -212,15 +204,28 @@ const DetailsWorkScreen = ({ route, navigation }) => {
               )}
             </View>
 
+            {service? service.status === "Completed"?
             <Button
-              size="sm"
-              colorScheme="gray"
-              onPress={handleSubmit(handleServiceUpdate)}
-            >
-              <Text style={{ fontWeight: "600", fontSize: 14, color: "#fff" }}>
-                Update Status
-              </Text>
-            </Button>
+            size="sm"
+            colorScheme="gray"
+            isDisabled= {true}
+            onPress={handleSubmit(handleServiceUpdate)}
+          >
+            <Text style={{ fontWeight: "600", fontSize: 14, color: "#fff" }}>
+              Update Status
+            </Text>
+          </Button>:
+            <Button
+            size="sm"
+            colorScheme="gray"
+            onPress={handleSubmit(handleServiceUpdate)}
+          >
+            <Text style={{ fontWeight: "600", fontSize: 14, color: "#fff" }}>
+              Update Status
+            </Text>
+          </Button>: <></>}
+
+            
 
             <Heading size="sm" color="#808080" mt="2" mb="1">
               Customer Info:
@@ -239,25 +244,17 @@ const DetailsWorkScreen = ({ route, navigation }) => {
                   fontWeight: "600",
                   fontSize: 16,
                   color: "#808080",
+                  marginBottom: 3,
                 }}
               >
                 Name: {service.customer.name}
               </Text>
-              <Text
-                style={{
-                  marginTop: 2,
-                  fontWeight: "500",
-                  fontSize: 14,
-                  color: "#808080",
-                }}
-              >
-                Email: {service.customer.email}
-              </Text>
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
                   alignItems: "center",
+                  marginBottom: 3,
                 }}
               >
                 <Text
@@ -269,6 +266,39 @@ const DetailsWorkScreen = ({ route, navigation }) => {
                 >
                   Phone: {service.customer.phone}
                 </Text>
+                <Button
+                  size="xs"
+                  ml="4"
+                  px="3"
+                  py="1"
+                  colorScheme="green"
+                  variant="solid"
+                  onPress={() => {
+                    return Linking.openURL(`tel:${service.customer.phone}`);
+                  }}
+                >
+                  Call Now
+                </Button>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    marginTop: 2,
+                    fontWeight: "500",
+                    fontSize: 14,
+                    color: "#808080",
+                  }}
+                >
+                  Email: {service.customer.email}
+                </Text>
+
                 <View
                   style={{
                     flexDirection: "row",

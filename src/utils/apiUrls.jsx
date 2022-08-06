@@ -1,6 +1,7 @@
-export const BASE_URL = "https://demo.efixbd.com/api";
-
+// export const BASE_URL = "https://demo.efixbd.com/api";
 // export const BASE_URL = "http://192.168.1.105:2100/api";
+export const BASE_URL = "https://efixbd.com/api";
+
 
 // import { useFonts } from "expo-font";
 // let [fontsLoaded] = useFonts({

@@ -60,7 +60,6 @@ const CreateServiceScreen = () => {
     const serviceObjData = new FormData();
     serviceObjData.append("customerID", user?.id);
     serviceObjData.append("title", data.title);
-    serviceObjData.append("priority", data.priority);
     serviceObjData.append("details", data.details);
 
     if (fileResponse && Object.entries(fileResponse).length != 0) {
@@ -135,14 +134,6 @@ const CreateServiceScreen = () => {
               errors={errors}
             />
 
-            <CreateServiceSelectPriority
-              name="priority"
-              label="Select Priority"
-              control={control}
-              rules={{ required: "Field is required", minLength: 3 }}
-              errors={errors}
-            />
-
             <CreateServiceTextArea
               type="text"
               name="details"
@@ -175,7 +166,11 @@ const CreateServiceScreen = () => {
                 >
                   <Ionicons name="document" size={20} color="#fff" />
                   <Text
-                    style={{ color: "#fff", fontWeight: "700", marginTop: 5 }}
+                    style={{
+                      color: "#fff",
+                      fontWeight: "700",
+                      marginTop: 5,
+                    }}
                   >
                     Select File
                   </Text>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   View,
   SafeAreaView,
@@ -7,6 +7,7 @@ import {
   FlatList,
   ImageBackground,
 } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Box, Heading, Center, Link, Button } from "native-base";
@@ -19,7 +20,7 @@ import Loading from "../../utils/Loading";
 
 import axios from "axios";
 
-const TechnicianInvoiceListScreen = ({ route, navigation }) => {
+const TechnicianInvoiceListScreen = ({ navigation }) => {
   const [invoiceItems, setInvoiceItems] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
   const { user } = useContext(AuthContext);
@@ -39,16 +40,12 @@ const TechnicianInvoiceListScreen = ({ route, navigation }) => {
     setPageLoading(false);
   };
 
-  useEffect(() => {
-    if (route.params) {
-      if ("techIncomeList" in route.params) {
-        setInvoiceItems(route.params.techIncomeList);
-      }
-      setPageLoading(false);
-    } else {
+  useFocusEffect(
+    useCallback(() => {
       getCreateServiceList();
-    }
-  }, []);
+  }, [])
+  );
+ 
 
   if (pageLoading) return <Loading />;
 
@@ -80,9 +77,21 @@ const TechnicianInvoiceListScreen = ({ route, navigation }) => {
           borderTopRightRadius: 15,
         }}
         ListHeaderComponent={
-          <Heading size="md" color="#333" mt="5" ml="5">
-            Invoice List View
-          </Heading>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 5,
+            }}
+          >
+            <Heading size="md" color="#333" mt="5" ml="5">
+              Invoice List View
+            </Heading>
+            <Heading size="md" color="#333" mt="5" mr="5">
+              All ({invoiceItems.length})
+            </Heading>
+          </View>
         }
         ListEmptyComponent={
           <Center
@@ -130,23 +139,10 @@ const TechnicianInvoiceListScreen = ({ route, navigation }) => {
                 alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                }}
-              >
-                <Ionicons
-                  name="list"
-                  size={15}
-                  style={{ marginRight: 3, marginTop: 5 }}
-                  color="#bdbbbb"
-                />
-                <Text style={{ opacity: 0.5, marginTop: 5 }}>
-                  Payment Status: {item.status}
-                </Text>
-              </View>
+              <Text style={{ opacity: 0.5, marginTop: 5 }}>
+                Total Cost: ৳ {item.tech_charge + item.equip_charge}
+              </Text>
+
               <Text
                 style={{
                   backgroundColor: "#71bfe3",
@@ -183,7 +179,7 @@ const TechnicianInvoiceListScreen = ({ route, navigation }) => {
                   borderRadius: 5,
                   justifyContent: "center",
                 }}
-                href={`http://demo.efixbd.com/api/download-invoice/${item.id}`}
+                href={`${BASE_URL}/download-invoice/${item.id}`}
               >
                 Download
               </Link>

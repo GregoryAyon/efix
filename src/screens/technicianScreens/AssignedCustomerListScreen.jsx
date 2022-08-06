@@ -8,10 +8,10 @@ import {
   ImageBackground,
 } from "react-native";
 import { useFocusEffect } from '@react-navigation/native';
-
+import * as Linking from "expo-linking";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Box, Heading, Center, Link, Button } from "native-base";
-
+import { Searchbar } from "react-native-paper";
 import { AuthContext } from "../../Context/AuthContext";
 import { BASE_URL } from "../../utils/apiUrls";
 import { handleError } from "../../utils/LocalStoreCustomFunc";
@@ -20,20 +20,23 @@ import Loading from "../../utils/Loading";
 
 import axios from "axios";
 
-const CustomerInvoiceListScreen = ({ navigation }) => {
-  const [invoiceItems, setInvoiceItems] = useState("");
-  const { user } = useContext(AuthContext);
+const AssignedCustomerListScreen = ({ navigation }) => {
+  const [customers, setCustomer] = useState("");
+  const [search, setSearch] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+
+  // console.log(user.work_area__area_name);
 
   const getCreateServiceList = async () => {
     const headers = await getHeader();
     await axios
-      .get(`${BASE_URL}/invoice/?service__customer=${user?.id}`, {
+      .get(`${BASE_URL}/account/?role=customer&work_area=${user?.work_area}&search=${search}`, {
         headers,
       })
       .then((res) => {
         // console.log(res.data);
-        setInvoiceItems(res.data);
+        setCustomer(res.data);
       })
       .catch((error) => handleError(error));
     // console.log('Clicked!');
@@ -43,8 +46,9 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       getCreateServiceList();
-  }, [])
+  }, [search])
   );
+ 
 
   if (pageLoading) return <Loading />;
 
@@ -65,6 +69,22 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
         }}
       ></View>
 
+<View
+          style={{
+            backgroundColor: "#dbd9d9",
+            marginTop: 10,
+            padding: 18,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
+        >
+          <Searchbar
+            placeholder="Search Service"
+            onChangeText={(value) => setSearch(value)}
+            value={search}
+          />
+        </View>
+
       <FlatList
         h="100%"
         w="100%"
@@ -72,8 +92,8 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
           flex: 1,
           backgroundColor: "#dbd9d9",
           marginTop: 10,
-          borderTopLeftRadius: 15,
-          borderTopRightRadius: 15,
+          // borderTopLeftRadius: 15,
+          // borderTopRightRadius: 15,
         }}
         ListHeaderComponent={
           <View
@@ -85,10 +105,10 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
             }}
           >
             <Heading size="md" color="#333" mt="5" ml="5">
-              Invoice List View
+              Assigned Customer List
             </Heading>
             <Heading size="md" color="#333" mt="5" mr="5">
-              All ({invoiceItems.length})
+              All ({customers.length})
             </Heading>
           </View>
         }
@@ -108,27 +128,49 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
             />
           </Center>
         }
-        data={invoiceItems}
+        data={customers}
         renderItem={({ item }) => (
           <Box
             bg="#fff"
             width="90%"
             alignSelf="center"
             mt="3"
-            p="3"
+            p="5"
             rounded="lg"
             shadow={2}
             mb="2"
           >
-            <Text
+            <View
+              style={{
+                marginTop: 5,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text
               style={{
                 fontSize: 16,
                 fontWeight: "600",
                 opacity: 0.5,
               }}
             >
-              {item.service.title}
+              {item.name}
             </Text>
+            <Text
+                style={{
+                  backgroundColor: "#71bfe3",
+                  padding: 3,
+                  width: 100,
+                  borderRadius: 5,
+                  textAlign: "center",
+                  color: "#fff",
+                }}
+              >
+                Reg No.{item.reg_no}
+              </Text>
+            </View>
+            
 
             <View
               style={{
@@ -139,83 +181,35 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
               }}
             >
               <Text style={{ opacity: 0.5, marginTop: 5 }}>
-                Total Cost: ৳ {item.tech_charge + item.equip_charge}
+                Phone: {item.phone}
               </Text>
-              <Text
-                style={{
-                  backgroundColor: "#71bfe3",
-                  padding: 3,
-                  width: 120,
-                  borderRadius: 5,
-                  textAlign: "center",
-                  color: "#fff",
-                }}
-              >
-                Service No.{item.service.servicereq_no}
-              </Text>
+              <Button
+                  size="xs"
+                  ml="4"
+                  px="8"
+                  py="1"
+                  colorScheme="green"
+                  variant="outline"
+                  onPress={() => {
+                    return Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
+                  Call Now
+                </Button>
+              
             </View>
 
             <View
               style={{
                 marginTop: 8,
                 flexDirection: "row",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
                 alignItems: "center",
               }}
             >
-              <Link
-                isExternal
-                _text={{
-                  color: "white",
-                  fontSize: "sm",
-                  textDecoration: "none",
-                }}
-                style={{
-                  backgroundColor: "#286fad",
-                  paddingHorizontal: 10,
-                  paddingVertical: 7,
-                  borderRadius: 5,
-                  justifyContent: "center",
-                }}
-                href={`${BASE_URL}/download-invoice/${item.id}`}
-              >
-                Download
-              </Link>
-
-              <Button
-                size="sm"
-                colorScheme="primary"
-                variant="subtle"
-                onPress={() =>
-                  navigation.navigate("Customer Invoice Details", {
-                    invoice: item,
-                  })
-                }
-              >
-                View Details
-              </Button>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Ionicons
-                  name="calendar"
-                  size={15}
-                  style={{ marginRight: 3 }}
-                  color="#bdbbbb"
-                />
-                <Text
-                  style={{
-                    opacity: 0.5,
-                  }}
-                >
-                  Issued: {item.created_at}
-                </Text>
-              </View>
+              <Text style={{ opacity: 0.5, marginTop: 5 }}>
+                Address: {item.house_info}
+              </Text>
             </View>
           </Box>
         )}
@@ -225,4 +219,4 @@ const CustomerInvoiceListScreen = ({ navigation }) => {
   );
 };
 
-export default CustomerInvoiceListScreen;
+export default AssignedCustomerListScreen;

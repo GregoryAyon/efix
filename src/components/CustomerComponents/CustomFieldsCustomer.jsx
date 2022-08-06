@@ -122,15 +122,8 @@ export const CreateServiceSelectStatus = ({
               mt={1}
               onValueChange={(val) => onChange(val)}
             >
-              <Select.Item label="New" value="new" />
-              <Select.Item label="In Progress" value="in_progress" />
-              <Select.Item
-                label="Waitting on Customer"
-                value="waittingoncustomer"
-              />
-              <Select.Item label="Fixed" value="fixed" />
-              <Select.Item label="Closed" value="closed" />
-              <Select.Item label="Cancelled" value="cancelled" />
+              <Select.Item label="Pending" value="Pending" />
+              <Select.Item label="Completed" value="Completed" />
             </Select>
             <FormControl.ErrorMessage>
               {errors[name]?.message}

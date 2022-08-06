@@ -60,7 +60,7 @@ const LoginScreen = ({ navigation }) => {
     // console.log("get in to getUser!");
 
     await axios
-      .get(`${BASE_URL}/account/?search=${userId}`, {
+      .get(`${BASE_URL}/account/?user=${userId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `JWT ${token}`,
@@ -89,12 +89,15 @@ const LoginScreen = ({ navigation }) => {
         }
       })
       .catch((error) => handleError(error));
+      setInitLoading(false);
   };
 
   const authenticate = async () => {
     let token = await SecureStore.getItemAsync("token");
     let expiryDate = await SecureStore.getItemAsync("expiry_date");
     let userId = await SecureStore.getItemAsync("user_id");
+
+    // console.log(token, userId);
 
     if (token && new Date() < new Date(expiryDate * 1000)) {
       getUser(token, userId);
@@ -182,8 +185,8 @@ const LoginScreen = ({ navigation }) => {
           rules={{
             required: "Field is required",
             minLength: {
-              value: 6,
-              message: "Password should be at least 6 characters long",
+              value: 4,
+              message: "Password should be at least 4 characters long",
             },
           }}
           passShow={passShow}

@@ -6,10 +6,16 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+import * as Updates from 'expo-updates';
+import {Button } from "native-base";
 import { AuthContext } from "../Context/AuthContext";
 
 const inactiveComponent = () => {
   const { user } = useContext(AuthContext);
+
+  async function ReloadApp(){
+    await Updates.reloadAsync();
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#e4e3e6" }}>
@@ -36,16 +42,21 @@ const inactiveComponent = () => {
             marginBottom: 10,
           }}
         >
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "700",
-              color: "#fff",
-            }}
-          >
-            Hello, {user?.name} !
-          </Text>
-          <TouchableOpacity onPress={() => {}}>
+          <View style={{
+                flexDirection: "column",
+              }}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "700",
+                  color: "#fff",
+                }}
+              >
+                Hello, {user?.name} !
+              </Text>
+              <Text style={{fontSize: 14, color: "#fff", fontWeight: "600",}}>ID: #{user?.reg_no}</Text>
+              </View>
+
             <ImageBackground
               source={require("../../assets/images/user-profile.jpg")}
               style={{
@@ -54,7 +65,7 @@ const inactiveComponent = () => {
               }}
               imageStyle={{ borderRadius: 25 }}
             />
-          </TouchableOpacity>
+
         </View>
 
         <View>
@@ -78,8 +89,21 @@ const inactiveComponent = () => {
           >
             We recieved your registretion. But you can't access your deshborad
             yet. Please get your membership first. Now please close your app and
-            wait for acount activation notification then login again. Thank you.
+            wait for acount activation notification then open app again. Thank you.
           </Text>
+        </View>
+
+        <View style={{
+          marginTop: 10,
+          paddingHorizontal: 25,
+        }}>
+        <Button
+              bg="#286fad"
+              mt="3"
+              onPress={ReloadApp}
+            >
+              Reload
+            </Button>
         </View>
       </View>
     </SafeAreaView>

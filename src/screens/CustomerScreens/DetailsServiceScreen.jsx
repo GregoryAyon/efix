@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Container, Box, ScrollView, Heading, Link } from "native-base";
+import { Container, Box, ScrollView, Heading, Link, Button } from "native-base";
 import { useForm } from "react-hook-form";
+import * as Linking from "expo-linking";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -82,15 +83,6 @@ const DetailsServiceScreen = ({ route }) => {
               isDisabled={true}
               name="status"
               label="Select Status"
-              control={control}
-              rules={{ required: "Field is required", minLength: 3 }}
-              errors={errors}
-            />
-
-            <CreateServiceSelectPriority
-              isDisabled={true}
-              name="priority"
-              label="Select Priority"
               control={control}
               rules={{ required: "Field is required", minLength: 3 }}
               errors={errors}
@@ -191,25 +183,17 @@ const DetailsServiceScreen = ({ route }) => {
                   fontWeight: "600",
                   fontSize: 16,
                   color: "#808080",
+                  marginBottom: 3,
                 }}
               >
                 Name: {service.technician.name}
               </Text>
-              <Text
-                style={{
-                  marginTop: 2,
-                  fontWeight: "500",
-                  fontSize: 14,
-                  color: "#808080",
-                }}
-              >
-                Email: {service.technician.email}
-              </Text>
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
                   alignItems: "center",
+                  marginBottom: 3,
                 }}
               >
                 <Text
@@ -220,6 +204,38 @@ const DetailsServiceScreen = ({ route }) => {
                   }}
                 >
                   Phone: {service.technician.phone}
+                </Text>
+                <Button
+                  size="xs"
+                  ml="4"
+                  px="3"
+                  py="1"
+                  colorScheme="green"
+                  variant="solid"
+                  onPress={() => {
+                    return Linking.openURL(`tel:${service.technician.phone}`);
+                  }}
+                >
+                  Call Now
+                </Button>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    marginTop: 2,
+                    fontWeight: "500",
+                    fontSize: 14,
+                    color: "#808080",
+                  }}
+                >
+                  Email: {service.technician.email}
                 </Text>
                 <View
                   style={{

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import {
   View,
   SafeAreaView,
@@ -8,6 +8,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { Searchbar } from "react-native-paper";
+import { useFocusEffect } from '@react-navigation/native';
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Box, Heading, Center } from "native-base";
@@ -45,39 +46,20 @@ const ServiceListScreen = ({ route, navigation }) => {
     setPageLoading(false);
   };
 
-  const getStatusPerfactValue = (item) => {
-    // console.log(typeof item.status);
-    if (item.status === "new") {
-      return "New";
-    } else if (item.status === "in_progress") {
-      return "In Progress";
-    } else if (item.status === "waittingoncustomer") {
-      return "Waitting on Customer";
-    } else if (item.status === "fixed") {
-      return "Fixed";
-    } else if (item.status === "closed") {
-      return "Closed";
-    } else if (item.status === "cancelled") {
-      return "Cancelled";
-    } else {
-      return "None";
-    }
-  };
-
-  useEffect(() => {
-    if (route.params) {
-      if ("completedPosts" in route.params) {
-        setServiceItems(route.params.completedPosts);
-      } else if ("incompletedPosts" in route.params) {
-        setServiceItems(route.params.incompletedPosts);
-      } else if ("cancelledPosts" in route.params) {
-        setServiceItems(route.params.cancelledPosts);
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params) {
+        if ("completedPosts" in route.params) {
+          setServiceItems(route.params.completedPosts);
+        } else if ("incompletedPosts" in route.params) {
+          setServiceItems(route.params.incompletedPosts);
+        }
+        setPageLoading(false);
+      } else {
+        getCreateServiceList();
       }
-      setPageLoading(false);
-    } else {
-      getCreateServiceList();
-    }
-  }, [search]);
+    }, [search])
+  );
 
   if (pageLoading) return <Loading />;
 
@@ -98,21 +80,25 @@ const ServiceListScreen = ({ route, navigation }) => {
         }}
       ></View>
 
-      <View
-        style={{
-          backgroundColor: "#dbd9d9",
-          marginTop: 10,
-          padding: 18,
-          borderTopLeftRadius: 15,
-          borderTopRightRadius: 15,
-        }}
-      >
-        <Searchbar
-          placeholder="Search Service"
-          onChangeText={(value) => setSearch(value)}
-          value={search}
-        />
-      </View>
+      {route.params ? (
+        <></>
+      ) : (
+        <View
+          style={{
+            backgroundColor: "#dbd9d9",
+            marginTop: 10,
+            padding: 18,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
+        >
+          <Searchbar
+            placeholder="Search Service"
+            onChangeText={(value) => setSearch(value)}
+            value={search}
+          />
+        </View>
+      )}
 
       <FlatList
         h="100%"
@@ -199,7 +185,7 @@ const ServiceListScreen = ({ route, navigation }) => {
                   color="#bdbbbb"
                 />
                 <Text style={{ opacity: 0.5, marginTop: 5 }}>
-                  Service Status: {getStatusPerfactValue(item)}
+                  Service Status: {item.status}
                 </Text>
               </View>
               <Text

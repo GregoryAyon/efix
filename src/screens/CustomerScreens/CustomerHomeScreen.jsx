@@ -1,55 +1,53 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   View,
-  Text,
   SafeAreaView,
-  ScrollView,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { Image } from "native-base";
-
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {
+  Button,
+  Container,
+  Heading,
+  Icon,
+  Box,
+  StatusBar,
+  ScrollView,
+  VStack,
+  Text,
+  HStack,
+  Divider,
+  Image,
+} from "native-base";
+import { useFocusEffect } from '@react-navigation/native';
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 import Loading from "../../utils/Loading";
 import { AuthContext } from "../../Context/AuthContext";
 
 import InactiveComponent from "../../components/inactiveComponent";
 import {
-  getCancelledPost,
   getcompletedPost,
   getincompletedPost,
-  getTotalCost,
-  getTotalCostAmount,
-  getTotalPaidCost,
-  getTotalPaidCostAmount,
-  getTotalUnpaidCost,
-  getTotalUnpaidCostAmount,
 } from "../../utils/QuickSummery";
 
 const CustomerHomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
   const [completedPostData, setCompletedPostData] = useState({});
   const [incompletedPostData, setIncompletedPostData] = useState({});
-  const [cancelledPostData, setCancelledPostData] = useState({});
-  const [totalCost, setTotalCost] = useState(null);
-  const [totalPaidCost, setTotalPaidCost] = useState(null);
-  const [totalUnpaidCost, setTotalUnpaidCost] = useState(null);
-
-  useEffect(() => {
-    getCancelledPost(user, setCancelledPostData);
-    getcompletedPost(user, setCompletedPostData);
-    getincompletedPost(user, setIncompletedPostData);
-    getTotalCost(user, setTotalCost);
-    getTotalPaidCost(user, setTotalPaidCost);
-    getTotalUnpaidCost(user, setTotalUnpaidCost);
-  }, []);
+ 
+  useFocusEffect(
+    useCallback(() => {
+      // console.log("Screen Loaded!");
+      getcompletedPost(user, setCompletedPostData);
+      getincompletedPost(user, setIncompletedPostData);
+    }, [])
+  );
 
   return (
     <>
       {user?.active ? (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#e4e3e6" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
           <View
             style={{
               backgroundColor: "#286fad",
@@ -57,7 +55,7 @@ const CustomerHomeScreen = ({ navigation }) => {
               height: 100,
               borderBottomLeftRadius: 15,
               borderBottomRightRadius: 15,
-              shadowColor: "#4a4848",
+              shadowColor: "#333",
               shadowOffset: { width: 0, height: 1 },
               shadowOpacity: 0.8,
               shadowRadius: 2,
@@ -66,13 +64,16 @@ const CustomerHomeScreen = ({ navigation }) => {
           >
             <View
               style={{
-                marginTop: 60,
+                marginTop: 50,
                 paddingHorizontal: 25,
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginBottom: 10,
               }}
             >
+              <View style={{
+                flexDirection: "column",
+              }}>
               <Text
                 style={{
                   fontSize: 18,
@@ -82,6 +83,9 @@ const CustomerHomeScreen = ({ navigation }) => {
               >
                 Hello, {user?.name} !
               </Text>
+              <Text style={{fontSize: 14, color: "#fff", fontWeight: "600",}}>ID: #{user?.reg_no}</Text>
+              </View>
+              
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <ImageBackground
                   source={require("../../../assets/images/user-profile.jpg")}
@@ -96,455 +100,185 @@ const CustomerHomeScreen = ({ navigation }) => {
           </View>
 
           <ScrollView>
-            {/* Info Section */}
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 10,
-                marginTop: 10,
-                marginBottom: 10,
-                borderTopLeftRadius: 15,
-                borderTopRightRadius: 15,
-
-                shadowColor: "#4a4848",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.8,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
-              {/* card row 1 */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Service List", {
-                      completedPosts: completedPostData,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
+            <Container h="100%" w="100%" maxWidth="100%">
+              <Box width="100%" padding="5">
+                <Heading size="sm" mb="2" color="#333">
+                  Information Summary
+                </Heading>
+                {/* Row One */}
+                <HStack
+                  mb="5"
+                  justifyContent="space-evenly"
+                  alignItems="center"
+                  width="100%"
+                  bg="#286fad"
+                  shadow={2}
+                  borderRadius="5"
+                  padding="2"
                 >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Service List", {
+                        completedPosts: completedPostData,
+                      })
+                    }
                   >
-                    Completed Post
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
+                    <VStack space={2} alignItems="center">
+                      <Text color="#fff">Completed Service</Text>
+                      <Icon as={Feather} name="file" size="lg" color="#fff" />
+                      <Heading size="md" color="#fff">
+                        {completedPostData ? completedPostData.length : 0}
+                      </Heading>
+                    </VStack>
+                  </TouchableOpacity>
+
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Service List", {
+                        incompletedPosts: incompletedPostData,
+                      })
+                    }
                   >
-                    {completedPostData ? completedPostData.length : 0}
-                  </Text>
-                </TouchableOpacity>
+                    <VStack space={2} alignItems="center">
+                      <Text color="#fff">Pending Service</Text>
+                      <Icon as={Feather} name="file" size="lg" color="#fff" />
+                      <Heading size="md" color="#fff">
+                        {incompletedPostData ? incompletedPostData.length : 0}
+                      </Heading>
+                    </VStack>
+                  </TouchableOpacity>
+                </HStack>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Service List", {
-                      incompletedPosts: incompletedPostData,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
+                {/* Functions Section */}
+                <Heading size="sm" mb="2" color="#333">
+                  Customer Actions
+                </Heading>
+                <HStack
+                  mb="5"
+                  justifyContent="space-evenly"
+                  alignItems="center"
+                  width="100%"
+                  bg="#ffffff"
+                  shadow={2}
+                  borderWidth="2"
+                  borderColor="#286fad"
+                  borderRadius="5"
+                  padding="5"
                 >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Create Service")}
                   >
-                    Incompleted Post
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
+                    <VStack space={3} alignItems="center">
+                      <Icon as={Feather} name="plus" size="lg" color="#333" />
+                      <Text color="#333">Create Service</Text>
+                    </VStack>
+                  </TouchableOpacity>
+
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
+
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Service List")}
                   >
-                    {incompletedPostData ? incompletedPostData.length : 0}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                    <VStack space={3} alignItems="center">
+                      <Icon as={Feather} name="list" size="lg" color="#333" />
+                      <Text color="#333">Service List</Text>
+                    </VStack>
+                  </TouchableOpacity>
 
-              {/* card row 2 */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Service List", {
-                      cancelledPosts: cancelledPostData,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
 
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Customer Invoice List")}
+                  >
+                    <VStack space={3} alignItems="center">
+                      <Icon
+                        as={Feather}
+                        name="file-text"
+                        size="lg"
+                        color="#333"
+                      />
+                      <Text color="#333">Invoice List</Text>
+                    </VStack>
+                  </TouchableOpacity>
+                </HStack>
+
+                  
+                {/* Payment Section */}
+                {/* <Heading size="sm" mb="2" color="#333">
+                  Payment Information
+                </Heading>
+                <HStack
+                  mb="3"
+                  flexDirection="column"
+                  width="100%"
+                  bg="#ffffff"
+                  shadow={2}
+                  borderWidth="2"
+                  borderColor="#286fad"
+                  borderRadius="5"
+                  px="5"
+                  py="3"
                 >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Cancelled Post
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    {cancelledPostData ? cancelledPostData.length : 0}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Customer Invoice List")}
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="pricetag"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Total Cost
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text>&#x9F3;</Text> {getTotalCostAmount(totalCost)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* card row 3 */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Customer Invoice List", {
-                      totalPaidPosts: totalPaidCost,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="pricetag"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Total Paid
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text>&#x9F3;</Text> {getTotalPaidCostAmount(totalPaidCost)}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Customer Invoice List", {
-                      totalUnpaidPosts: totalUnpaidCost,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="pricetag"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Total Unpaid
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text>&#x9F3;</Text>{" "}
-                    {getTotalUnpaidCostAmount(totalUnpaidCost)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Function Section */}
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 10,
-                marginTop: 5,
-                marginBottom: 5,
-
-                shadowColor: "#4a4848",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.8,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Create Service")}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 100,
-                      padding: 10,
-                    }}
-                  >
-                    <MaterialIcons name="add" size={40} color="#286fad" />
-                    <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                      Create Service
-                    </Text>
+                  <View style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}>
+                    <Image
+                      resizeMode="contain"
+                      w="80px"
+                      h="40px"
+                      source={require("../../../assets/images/bkash.png")}
+                      alt="bkash"
+                      mr="5"
+                    />
+                    <Text color="#333" fontSize="20">01700000000</Text>
                   </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Service List")}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 100,
-                      marginLeft: 20,
-                      padding: 10,
-                    }}
-                  >
-                    <Ionicons name="list" size={40} color="#286fad" />
-                    <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                      Services List
-                    </Text>
+                  <View style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}>
+                    <Image
+                      resizeMode="contain"
+                      w="80px"
+                      h="35px"
+                      source={require("../../../assets/images/nagad.png")}
+                      alt="nagad"
+                      mr="5"
+                    />
+                    <Text color="#333" fontSize="20">01700000000</Text>
                   </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Customer Invoice List")}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 100,
-                      marginLeft: 20,
-                      padding: 10,
-                    }}
-                  >
-                    <Ionicons name="document" size={40} color="#286fad" />
-                    <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                      Invoices
-                    </Text>
+                  <View style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}>
+                    <Image
+                      resizeMode="contain"
+                      w="80px"
+                      h="35px"
+                      source={require("../../../assets/images/rocket.png")}
+                      alt="rocket"
+                      mr="5"
+                    />
+                    <Text color="#333" fontSize="20" mt="1">01700000000</Text>
                   </View>
-                </TouchableOpacity>
-              </View>
-              <Image
-                // mt="1"
-                size="xl"
-                resizeMode="contain"
-                rounded={5}
-                w="100%"
-                source={require("../../../assets/images/customer-home.jpg")}
-                alt="profile_bg"
-              />
-            </View>
+                </HStack> */}
+
+                <Image
+                  mt="10"
+                  size="xl"
+                  resizeMode="contain"
+                  rounded={5}
+                  w="100%"
+                  source={require("../../../assets/images/technicianHome.png")}
+                  alt="profile_bg"
+                />
+              </Box>
+            </Container>
           </ScrollView>
         </SafeAreaView>
       ) : (

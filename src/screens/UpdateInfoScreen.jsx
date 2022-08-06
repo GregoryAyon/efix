@@ -44,7 +44,7 @@ const UpdateInfoScreen = ({ navigation }) => {
       name: user?.name,
       phone: user?.phone,
       email: user?.email,
-      role: user?.role,
+      // role: user?.role,
       house_info: user?.house_info,
     },
   });
@@ -149,7 +149,7 @@ const UpdateInfoScreen = ({ navigation }) => {
               errors={errors}
             />
 
-            <CustomSelect
+            {/* <CustomSelect
               name="role"
               label="Select Role"
               placeholder="Select Role"
@@ -157,7 +157,7 @@ const UpdateInfoScreen = ({ navigation }) => {
               items={["customer", "technician"]}
               rules={{ required: "Field is required", minLength: 4 }}
               errors={errors}
-            />
+            /> */}
 
             <CustomSignupTextArea
               type="text"

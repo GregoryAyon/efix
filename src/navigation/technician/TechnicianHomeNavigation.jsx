@@ -7,6 +7,7 @@ import DetailsWorkScreen from "../../screens/technicianScreens/DetailsWorkScreen
 import CreateInvoiceScreen from "../../screens/technicianScreens/CreateInvoiceScreen";
 import TechnicianInvoiceListScreen from "../../screens/technicianScreens/TechnicianInvoiceListScreen";
 import TechnicianInvoiceDetailsScreen from "../../screens/technicianScreens/TechnicianInvoiceDetailsScreen";
+import AssignedCustomerListScreen from "../../screens/technicianScreens/AssignedCustomerListScreen";
 import UpdateInfoScreen from "../../screens/UpdateInfoScreen";
 import AboutScreen from "../../screens/AboutScreen";
 
@@ -63,6 +64,15 @@ const TechnicianHomeNavigation = () => {
       <Stack.Screen
         name="Technician Invoice Details"
         component={TechnicianInvoiceDetailsScreen}
+        options={{
+          headerTransparent: true,
+          headerTintColor: "white",
+        }}
+      />
+
+      <Stack.Screen
+        name="Assigned Customer List"
+        component={AssignedCustomerListScreen}
         options={{
           headerTransparent: true,
           headerTintColor: "white",

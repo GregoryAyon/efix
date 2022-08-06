@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
         onPress: async () => {
           await SecureStore.deleteItemAsync("token");
           await SecureStore.deleteItemAsync("expiry_Date");
+          await SecureStore.deleteItemAsync("user_id");
           setUser(null);
           navigation.replace("Login");
         },

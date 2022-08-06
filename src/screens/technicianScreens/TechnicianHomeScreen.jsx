@@ -1,48 +1,54 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import {
   View,
-  Text,
   SafeAreaView,
-  ScrollView,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import { Image } from "native-base";
-
-import Ionicons from "react-native-vector-icons/Ionicons";
+import {
+  Button,
+  Container,
+  Heading,
+  Icon,
+  Box,
+  StatusBar,
+  ScrollView,
+  VStack,
+  Text,
+  HStack,
+  Divider,
+  Image,
+} from "native-base";
+import { useFocusEffect } from '@react-navigation/native';
+import { Feather, Ionicons } from "@expo/vector-icons";
 
 import Loading from "../../utils/Loading";
 import { AuthContext } from "../../Context/AuthContext";
 
 import InactiveComponent from "../../components/inactiveComponent";
 import {
-  getAssignedService,
   getcompletedService,
   getPendingService,
-  getTechIncome,
-  getTechIncomeAmount,
 } from "../../utils/QuickSummery";
 
 const TechnicianHomeScreen = ({ navigation }) => {
   const { user } = useContext(AuthContext);
-  const [assignedServiceData, setAssignedServiceData] = useState({});
   const [completedServiceData, setCompletedServiceData] = useState({});
   const [pendingServiceData, setPendingServiceData] = useState({});
-  const [techIncome, setTechIncome] = useState(null);
 
-  // console.log(completedServiceData.length);
-
-  useEffect(() => {
-    getAssignedService(user, setAssignedServiceData);
-    getcompletedService(user, setCompletedServiceData);
-    getPendingService(user, setPendingServiceData);
-    getTechIncome(user, setTechIncome);
-  }, []);
+  // console.log(user);
+  useFocusEffect(
+    useCallback(() => {
+      getcompletedService(user, setCompletedServiceData);
+      getPendingService(user, setPendingServiceData);
+    }, [])
+  );
+  
 
   return (
     <>
       {user?.active ? (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#edeef5" }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
           <View
             style={{
               backgroundColor: "#286fad",
@@ -59,13 +65,16 @@ const TechnicianHomeScreen = ({ navigation }) => {
           >
             <View
               style={{
-                marginTop: 60,
+                marginTop: 50,
                 paddingHorizontal: 25,
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginBottom: 10,
               }}
             >
+              <View style={{
+                flexDirection: "column",
+              }}>
               <Text
                 style={{
                   fontSize: 18,
@@ -75,6 +84,8 @@ const TechnicianHomeScreen = ({ navigation }) => {
               >
                 Hello, {user?.name} !
               </Text>
+              <Text style={{fontSize: 14, color: "#fff", fontWeight: "600",}}>ID: #{user?.reg_no}</Text>
+              </View>
               <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
                 <ImageBackground
                   source={require("../../../assets/images/user-profile.jpg")}
@@ -89,331 +100,130 @@ const TechnicianHomeScreen = ({ navigation }) => {
           </View>
 
           <ScrollView>
-            {/* Info Section */}
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 10,
-                marginTop: 10,
-                marginBottom: 10,
-                borderTopLeftRadius: 15,
-                borderTopRightRadius: 15,
-
-                shadowColor: "#4a4848",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.8,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
-              {/* card row 1 start */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Work List")}
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
+            <Container h="100%" w="100%" maxWidth="100%">
+              <Box width="100%" padding="5">
+                <Heading size="sm" mb="2" color="#333">
+                  Information Summary
+                </Heading>
+                {/* Row One */}
+                <HStack
+                  mb="8"
+                  justifyContent="space-evenly"
+                  alignItems="center"
+                  width="100%"
+                  bg="#286fad"
+                  shadow={2}
+                  borderRadius="5"
+                  padding="2"
                 >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Work List", {
+                        pendingServices: pendingServiceData,
+                      })
+                    }
                   >
-                    Assigned Services
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
+                    <VStack space={2} alignItems="center">
+                      <Text color="#fff">Pending Services</Text>
+                      <Icon as={Feather} name="file" size="lg" color="#fff" />
+                      <Heading size="md" color="#fff">
+                        {pendingServiceData ? pendingServiceData.length : 0}
+                      </Heading>
+                    </VStack>
+                  </TouchableOpacity>
+
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Work List", {
+                        completedServices: completedServiceData,
+                      })
+                    }
                   >
-                    {assignedServiceData ? assignedServiceData.length : 0}
-                  </Text>
-                </TouchableOpacity>
+                    <VStack space={2} alignItems="center">
+                      <Text color="#fff">Completed Services</Text>
+                      <Icon as={Feather} name="file" size="lg" color="#fff" />
+                      <Heading size="md" color="#fff">
+                        {completedServiceData ? completedServiceData.length : 0}
+                      </Heading>
+                    </VStack>
+                  </TouchableOpacity>
+                </HStack>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Work List", {
-                      completedServices: completedServiceData,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
+                {/* Functions Section */}
+                <Heading size="sm" mb="2" color="#333">
+                  Technician Actions
+                </Heading>
+                <HStack
+                  mb="3"
+                  justifyContent="space-evenly"
+                  alignItems="center"
+                  width="100%"
+                  bg="#ffffff"
+                  shadow={2}
+                  borderWidth="2"
+                  borderColor="#286fad"
+                  borderRadius="5"
+                  padding="5"
                 >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("Work List")}
                   >
-                    Completed Services
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
+                    <VStack space={3} alignItems="center">
+                      <Icon as={Feather} name="list" size="lg" color="#333" />
+                      <Text color="#333">Work List</Text>
+                    </VStack>
+                  </TouchableOpacity>
+
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
+
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Technician Invoice List")
+                    }
                   >
-                    {completedServiceData ? completedServiceData.length : 0}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {/* card row 1 end */}
+                    <VStack space={3} alignItems="center">
+                      <Icon
+                        as={Feather}
+                        name="file-text"
+                        size="lg"
+                        color="#333"
+                      />
+                      <Text color="#333">Invoice List</Text>
+                    </VStack>
+                  </TouchableOpacity>
 
-              {/* card row 2 start */}
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 12,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Work List", {
-                      pendingServices: pendingServiceData,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
+                  <Divider bg="blue.400" height="50%" orientation="vertical" />
 
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("Assigned Customer List")
+                    }
                   >
-                    Pending Services
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    {pendingServiceData ? pendingServiceData.length : 0}
-                  </Text>
-                </TouchableOpacity>
+                    <VStack space={3} alignItems="center">
+                      <Icon
+                        as={Feather}
+                        name="user"
+                        size="lg"
+                        color="#333"
+                      />
+                      <Text color="#333">Customer List</Text>
+                    </VStack>
+                  </TouchableOpacity>
+                </HStack>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Technician Invoice List", {
-                      techIncomeList: techIncome,
-                    })
-                  }
-                  style={{
-                    backgroundColor: "#286fad",
-                    padding: 10,
-                    borderRadius: 5,
-                    width: 150,
-                    alignItems: "center",
-                    margin: 1,
-
-                    shadowColor: "#000",
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Ionicons
-                    name="copy"
-                    size={32}
-                    style={{ marginTop: 4 }}
-                    color="#fff"
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 16,
-                      fontWeight: "700",
-                      borderBottomWidth: 2,
-                      borderBottomColor: "#fff",
-                    }}
-                  >
-                    Total Income
-                  </Text>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontSize: 22,
-                      fontWeight: "700",
-                      marginTop: 5,
-                    }}
-                  >
-                    <Text>&#x9F3;</Text> {getTechIncomeAmount(techIncome)}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              {/* card row 2 end */}
-            </View>
-
-            {/* Function Section */}
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 10,
-                marginTop: 5,
-                marginBottom: 10,
-                paddingHorizontal: 25,
-
-                shadowColor: "#4a4848",
-                shadowOffset: { width: 0, height: 1 },
-                shadowOpacity: 0.8,
-                shadowRadius: 8,
-                elevation: 3,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Work List")}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 100,
-                      padding: 10,
-                    }}
-                  >
-                    <Ionicons name="list" size={40} color="#286fad" />
-                    <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                      Work List
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-
-                <View
-                  style={{
-                    borderLeftColor: "#286fad",
-                    borderLeftWidth: 4,
-                    height: 78,
-                  }}
-                ></View>
-
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("Technician Invoice List")}
-                >
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "center",
-                      width: 100,
-                      padding: 10,
-                    }}
-                  >
-                    <Ionicons name="document" size={40} color="#286fad" />
-                    <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                      Invoices
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Image
-                mt="6"
-                mb="4"
-                size="xl"
-                resizeMode="contain"
-                rounded={5}
-                w="100%"
-                source={require("../../../assets/images/customer-home.jpg")}
-                alt="profile_bg"
-              />
-            </View>
+                <Image
+                  mt="10"
+                  size="xl"
+                  resizeMode="contain"
+                  rounded={5}
+                  w="100%"
+                  source={require("../../../assets/images/technicianHome.png")}
+                  alt="profile_bg"
+                />
+              </Box>
+            </Container>
           </ScrollView>
         </SafeAreaView>
       ) : (

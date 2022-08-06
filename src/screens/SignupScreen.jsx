@@ -180,7 +180,7 @@ const SignupScreen = ({ navigation }) => {
           control={control}
           rules={{
             // required: "Field is required",
-            minLength: 3,
+            minLength: 4,
             pattern: { value: EMAIL_REGEX, message: "Invalid Email" },
           }}
           isRequired={false}
@@ -300,8 +300,8 @@ const SignupScreen = ({ navigation }) => {
           rules={{
             required: "Field is required",
             minLength: {
-              value: 6,
-              message: "Password should be at least 6 characters long",
+              value: 4,
+              message: "Password should be at least 4 characters long",
             },
           }}
           errors={errors}
@@ -328,7 +328,7 @@ const SignupScreen = ({ navigation }) => {
           rules={{
             required: "Field is required",
             minLength: {
-              value: 6,
+              value: 4,
               message: "Password should be at least 6 characters long",
             },
             validate: (value) => value === pwd || "Password do no match",
