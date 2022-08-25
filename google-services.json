@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "509341084866",
-    "project_id": "efixusers-f7cb7",
-    "storage_bucket": "efixusers-f7cb7.appspot.com"
+    "project_number": "174364808965",
+    "project_id": "efix-user-app-138da",
+    "storage_bucket": "efix-user-app-138da.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:509341084866:android:d98c00c294a7c95e1a9f5b",
+        "mobilesdk_app_id": "1:174364808965:android:0c1afec9498e0778eb496c",
         "android_client_info": {
           "package_name": "com.itsource.efix"
         }
       },
       "oauth_client": [
         {
-          "client_id": "509341084866-trhcv3bhvhhgth2pfchvj27eoq4hdgtd.apps.googleusercontent.com",
+          "client_id": "174364808965-kuonjm6mgmp2mfmt605gjotlk4n0eqbd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAWkEvzPoGl2jetSTsxCFbNzoX_H4GUsCY"
+          "current_key": "AIzaSyBFAQJyMXri9x08P6QnEWTg5T2A8j1NH24"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "509341084866-trhcv3bhvhhgth2pfchvj27eoq4hdgtd.apps.googleusercontent.com",
+              "client_id": "174364808965-kuonjm6mgmp2mfmt605gjotlk4n0eqbd.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

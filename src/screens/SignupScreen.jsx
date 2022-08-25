@@ -314,7 +314,7 @@ const SignupScreen = ({ navigation }) => {
           }}
         >
           N.B: Your password can not be too similar to your other personal
-          information.Your password must contain at least 8 characters.Your
+          information.Your password must contain at least 4 characters.Your
           password can not be a commonly used password.Your password can not be
           entirely numeric.
         </Text>

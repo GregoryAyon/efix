@@ -8,7 +8,8 @@ import {
   ImageBackground,
 } from "react-native";
 import { Searchbar } from "react-native-paper";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
+import * as Linking from "expo-linking";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Box, Heading, Center } from "native-base";
@@ -200,6 +201,41 @@ const ServiceListScreen = ({ route, navigation }) => {
               >
                 Service No.{item.servicereq_no}
               </Text>
+            </View>
+
+            <View
+              style={{
+                marginTop: 3,
+                marginBottom: 2,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ opacity: 0.5, marginTop: 5 }}>
+                Technician: {item.technician.name}
+              </Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  return Linking.openURL(`tel:${item.technician.phone}`);
+                }}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <Ionicons
+                  name="call"
+                  size={15}
+                  style={{ marginRight: 3, marginTop: 5 }}
+                  color="#0b8713"
+                />
+                <Text style={{ opacity: 0.5, marginTop: 5, color: "#0b8713" }}>
+                  {item.technician.phone}
+                </Text>
+              </TouchableOpacity>
             </View>
 
             <View
